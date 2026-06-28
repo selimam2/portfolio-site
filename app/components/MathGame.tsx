@@ -53,6 +53,26 @@ function generateQuestion(score: number): Question {
 }
 
 const GAME_DURATION = 60;
+const PB_KEY = "mathblitz_pb";
+
+function playTone(freq: number, type: OscillatorType, duration: number, gain: number) {
+  try {
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.connect(g);
+    g.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(gain, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.start();
+    osc.stop(ctx.currentTime + duration);
+  } catch {}
+}
+
+const playCorrect = () => playTone(880, "sine", 0.12, 0.25);
+const playWrong = () => playTone(160, "sawtooth", 0.18, 0.2);
 
 export default function MathGame() {
   const [phase, setPhase] = useState<Phase>("idle");
@@ -66,6 +86,7 @@ export default function MathGame() {
   const [playerName, setPlayerName] = useState("");
   const [showNameInput, setShowNameInput] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [personalBest, setPersonalBest] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const scoreRef = useRef(0);
@@ -79,6 +100,9 @@ export default function MathGame() {
 
   useEffect(() => {
     loadLeaderboard();
+    try {
+      setPersonalBest(parseInt(localStorage.getItem(PB_KEY) || "0", 10));
+    } catch {}
   }, [loadLeaderboard]);
 
   useEffect(() => {
@@ -89,6 +113,13 @@ export default function MathGame() {
             clearInterval(timerRef.current!);
             setPhase("done");
             setShowNameInput(true);
+            try {
+              const pb = parseInt(localStorage.getItem(PB_KEY) || "0", 10);
+              if (scoreRef.current > pb) {
+                localStorage.setItem(PB_KEY, String(scoreRef.current));
+                setPersonalBest(scoreRef.current);
+              }
+            } catch {}
             return 0;
           }
           return t - 1;
@@ -128,9 +159,11 @@ export default function MathGame() {
       setStreak((s) => s + 1);
       setFlash("correct");
       setQuestion(generateQuestion(next));
+      playCorrect();
     } else {
       setStreak(0);
       setFlash("wrong");
+      playWrong();
     }
 
     setInput("");
@@ -182,6 +215,9 @@ export default function MathGame() {
               <br />
               Questions get harder as your score climbs.
             </p>
+            {personalBest > 0 && (
+              <p className="text-indigo-400 text-sm mt-3">Your best: <span className="font-bold">{personalBest}</span></p>
+            )}
           </div>
 
           {leaderboard.length > 0 && (
@@ -278,6 +314,12 @@ export default function MathGame() {
             <p className="text-zinc-500 mt-2">
               {score === 1 ? "question" : "questions"} correct
             </p>
+            {score >= personalBest && score > 0 && (
+              <p className="text-yellow-400 text-sm mt-2 font-semibold">🏆 New personal best!</p>
+            )}
+            {personalBest > 0 && score < personalBest && (
+              <p className="text-zinc-500 text-sm mt-2">Your best: {personalBest}</p>
+            )}
           </div>
 
           {showNameInput ? (

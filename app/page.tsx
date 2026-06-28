@@ -5,18 +5,31 @@ import Education from "./components/Education";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
 import Contact from "./components/Contact";
+import FadeIn from "./components/FadeIn";
 
 export default function Home() {
   return (
     <>
       <Nav />
       <main>
-        <Hero />
-        <Experience />
-        <Education />
-        <Projects />
-        <Skills />
-        <Contact />
+        <FadeIn>
+          <Hero />
+        </FadeIn>
+        <FadeIn delay={50}>
+          <Experience />
+        </FadeIn>
+        <FadeIn delay={50}>
+          <Education />
+        </FadeIn>
+        <FadeIn delay={50}>
+          <Projects />
+        </FadeIn>
+        <FadeIn delay={50}>
+          <Skills />
+        </FadeIn>
+        <FadeIn delay={50}>
+          <Contact />
+        </FadeIn>
       </main>
       <footer className="max-w-3xl mx-auto px-6 py-8 border-t border-zinc-100">
         <p className="text-xs text-zinc-400">

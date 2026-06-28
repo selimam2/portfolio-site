@@ -25,10 +25,12 @@ export async function GET() {
   return NextResponse.json(entries);
 }
 
+const MAX_SCORE = 60; // 1 answer/sec for 60s is already superhuman
+
 export async function POST(req: NextRequest) {
   const { name, score } = await req.json();
 
-  if (!name || typeof score !== "number" || score < 0) {
+  if (!name || typeof score !== "number" || score < 0 || score > MAX_SCORE) {
     return NextResponse.json({ error: "Invalid payload." }, { status: 400 });
   }
 
