@@ -65,7 +65,7 @@ const jobs = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="max-w-3xl mx-auto px-6 py-20 border-t border-zinc-100">
+    <section id="experience" className="max-w-3xl mx-auto px-6 py-20 border-t border-zinc-100 dark:border-zinc-800">
       <h2 className="text-xs font-mono text-zinc-400 tracking-widest uppercase mb-12">
         Work Experience
       </h2>
@@ -74,7 +74,7 @@ export default function Experience() {
         {jobs.map((job) => (
           <div key={job.company}>
             <div className="flex items-baseline justify-between mb-6">
-              <h3 className="text-base font-semibold text-zinc-900">{job.company}</h3>
+              <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">{job.company}</h3>
               <span className="text-sm text-zinc-400">{job.location}</span>
             </div>
 
@@ -82,12 +82,12 @@ export default function Experience() {
               {job.roles.map((role) => (
                 <div key={role.title + role.period}>
                   <div className="flex items-baseline justify-between mb-3">
-                    <span className="text-sm font-medium text-zinc-700">{role.title}</span>
+                    <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">{role.title}</span>
                     <span className="text-sm text-zinc-400 font-mono">{role.period}</span>
                   </div>
                   <ul className="space-y-2">
                     {role.bullets.map((bullet, i) => (
-                      <li key={i} className="text-sm text-zinc-500 leading-relaxed pl-4 relative before:content-['–'] before:absolute before:left-0 before:text-zinc-300">
+                      <li key={i} className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed pl-4 relative before:content-['–'] before:absolute before:left-0 before:text-zinc-300 dark:before:text-zinc-600">
                         {bullet}
                       </li>
                     ))}

@@ -15,21 +15,21 @@ export default function Hero() {
           </h1>
         </div>
 
-        <p className="text-xl text-zinc-600 leading-relaxed max-w-xl">
+        <p className="text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-xl">
           Computer Engineering graduate from the{" "}
-          <span className="text-zinc-900 font-semibold">University of Waterloo</span>.
+          <span className="text-zinc-900 dark:text-zinc-100 font-semibold">University of Waterloo</span>.
           I build production systems end&#8209;to&#8209;end — infrastructure, backend,
           and UI. I&apos;m also deeply into{" "}
-          <span className="text-indigo-600 font-semibold">AI &amp; LLM engineering</span>
+          <span className="text-indigo-600 dark:text-indigo-400 font-semibold">AI &amp; LLM engineering</span>
           {" "}— prompt design, Claude API integration, and shipping AI-powered features
           into real products. Currently at{" "}
-          <span className="text-zinc-900 font-semibold">Shoplogix</span>{" "}
+          <span className="text-zinc-900 dark:text-zinc-100 font-semibold">Shoplogix</span>{" "}
           and the sole architect behind{" "}
           <a
             href="https://northshift.ca"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-indigo-600 font-semibold underline underline-offset-2 decoration-indigo-300 hover:decoration-indigo-600 transition-colors duration-150"
+            className="text-indigo-600 dark:text-indigo-400 font-semibold underline underline-offset-2 decoration-indigo-300 hover:decoration-indigo-600 transition-colors duration-150"
           >
             NorthShift Jobs ↗
           </a>
@@ -41,7 +41,7 @@ export default function Hero() {
             href="https://github.com/selimam2"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 text-white text-sm font-medium hover:bg-zinc-700 transition-colors duration-150"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 text-sm font-medium hover:bg-zinc-700 dark:hover:bg-zinc-300 transition-colors duration-150"
           >
             <GithubIcon />
             GitHub
@@ -50,14 +50,14 @@ export default function Hero() {
             href="https://www.linkedin.com/in/sami-el-imam-b4bb33a6/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-200 text-zinc-700 text-sm font-medium hover:border-indigo-400 hover:text-indigo-600 transition-colors duration-150"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 text-sm font-medium hover:border-indigo-400 hover:text-indigo-600 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-colors duration-150"
           >
             <LinkedinIcon />
             LinkedIn
           </a>
           <a
             href="mailto:samielimam@gmail.com"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-200 text-zinc-700 text-sm font-medium hover:border-indigo-400 hover:text-indigo-600 transition-colors duration-150"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 text-sm font-medium hover:border-indigo-400 hover:text-indigo-600 dark:hover:border-indigo-500 dark:hover:text-indigo-400 transition-colors duration-150"
           >
             <MailIcon />
             Email me

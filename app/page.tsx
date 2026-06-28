@@ -31,7 +31,7 @@ export default function Home() {
           <Contact />
         </FadeIn>
       </main>
-      <footer className="max-w-3xl mx-auto px-6 py-8 border-t border-zinc-100">
+      <footer className="max-w-3xl mx-auto px-6 py-8 border-t border-zinc-100 dark:border-zinc-800">
         <p className="text-xs text-zinc-400">
           © {new Date().getFullYear()} Sami El-Imam
         </p>
