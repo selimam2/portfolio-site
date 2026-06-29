@@ -7,7 +7,6 @@ type Phase = "idle" | "playing" | "done";
 interface Score {
   name: string;
   score: number;
-  date: string;
 }
 
 interface Question {
@@ -243,7 +242,6 @@ export default function MathGame() {
                     </span>
                     <span className="flex-1 text-zinc-300 truncate">{entry.name}</span>
                     <span className="font-bold tabular-nums">{entry.score}</span>
-                    <span className="text-zinc-600 text-xs">{entry.date}</span>
                   </div>
                 ))}
               </div>
@@ -294,12 +292,14 @@ export default function MathGame() {
           <div className="space-y-3">
             <input
               ref={inputRef}
-              type="number"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => setInput(e.target.value.replace(/[^0-9]/g, ""))}
               onKeyDown={(e) => e.key === "Enter" && submitAnswer()}
               placeholder="Answer…"
-              className="w-full text-center text-3xl font-bold bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="w-full text-center text-3xl font-bold bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30"
             />
             <p className="text-xs text-zinc-700">Press Enter to submit</p>
           </div>
@@ -373,8 +373,7 @@ export default function MathGame() {
                         </span>
                         <span className="flex-1 text-zinc-300 truncate">{entry.name}</span>
                         <span className="font-bold tabular-nums">{entry.score}</span>
-                        <span className="text-zinc-600 text-xs">{entry.date}</span>
-                      </div>
+                          </div>
                     ))}
                   </div>
                 </div>
