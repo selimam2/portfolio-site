@@ -21,7 +21,7 @@ export default function Education() {
             </span>
           </div>
         </div>
-        <span className="text-sm text-zinc-400 font-mono shrink-0">2021 – 2025</span>
+        <span className="text-sm text-zinc-400 font-mono shrink-0">2020 – 2025</span>
       </div>
     </section>
   );
