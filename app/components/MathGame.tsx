@@ -167,6 +167,7 @@ export default function MathGame() {
 
     setInput("");
     setTimeout(() => setFlash(null), 250);
+    inputRef.current?.focus();
   };
 
   const saveScore = async () => {
@@ -301,7 +302,13 @@ export default function MathGame() {
               placeholder="Answer…"
               className="w-full text-center text-3xl font-bold bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30"
             />
-            <p className="text-xs text-zinc-700">Press Enter to submit</p>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={submitAnswer}
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 active:scale-95 rounded-2xl font-bold text-xl transition-all"
+            >
+              ✓
+            </button>
           </div>
         </div>
       )}
