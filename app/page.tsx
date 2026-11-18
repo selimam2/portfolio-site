@@ -12,9 +12,10 @@ export default function Home() {
     <>
       <Nav />
       <main>
-        <FadeIn>
-          <Hero />
-        </FadeIn>
+        {/* Not wrapped in FadeIn: the hero is the first thing on screen
+            (the LCP element), and fading it in from opacity 0 delays LCP
+            until JS has hydrated. */}
+        <Hero />
         <FadeIn delay={50}>
           <Experience />
         </FadeIn>
@@ -32,7 +33,7 @@ export default function Home() {
         </FadeIn>
       </main>
       <footer className="max-w-3xl mx-auto px-6 py-8 border-t border-zinc-100 dark:border-zinc-800">
-        <p className="text-xs text-zinc-400">
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
           © {new Date().getFullYear()} Sami El-Imam
         </p>
       </footer>

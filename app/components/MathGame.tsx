@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 type Phase = "idle" | "playing" | "done";
@@ -86,6 +87,8 @@ export default function MathGame() {
   const [showNameInput, setShowNameInput] = useState(false);
   const [saving, setSaving] = useState(false);
   const [personalBest, setPersonalBest] = useState(0);
+  const [boardError, setBoardError] = useState(false);
+  const [saveError, setSaveError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const scoreRef = useRef(0);
@@ -93,11 +96,18 @@ export default function MathGame() {
   const loadLeaderboard = useCallback(async () => {
     try {
       const res = await fetch("/api/leaderboard");
-      if (res.ok) setLeaderboard(await res.json());
-    } catch {}
+      if (!res.ok) throw new Error(String(res.status));
+      setLeaderboard(await res.json());
+      setBoardError(false);
+    } catch {
+      setBoardError(true);
+    }
   }, []);
 
+  // Fetching the leaderboard and reading localStorage both have to happen
+  // on the client after hydration; a one-off sync on mount is intended.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadLeaderboard();
     try {
       setPersonalBest(parseInt(localStorage.getItem(PB_KEY) || "0", 10));
@@ -144,6 +154,7 @@ export default function MathGame() {
     setFlash(null);
     setShowNameInput(false);
     setPlayerName("");
+    setSaveError(false);
     setPhase("playing");
   };
 
@@ -173,16 +184,21 @@ export default function MathGame() {
   const saveScore = async () => {
     if (!playerName.trim()) return;
     setSaving(true);
+    setSaveError(false);
     try {
-      await fetch("/api/leaderboard", {
+      const res = await fetch("/api/leaderboard", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: playerName.trim(), score }),
       });
+      if (!res.ok) throw new Error(String(res.status));
       await loadLeaderboard();
-    } catch {}
+      setShowNameInput(false);
+    } catch {
+      // Keep the name input open so the player knows it didn't save.
+      setSaveError(true);
+    }
     setSaving(false);
-    setShowNameInput(false);
   };
 
   const timerColor =
@@ -197,12 +213,12 @@ export default function MathGame() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center justify-center px-6 py-12">
-      <a
+      <Link
         href="/"
-        className="absolute top-6 left-6 text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+        className="absolute top-6 left-6 text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
       >
-        ← Back to portfolio
-      </a>
+        <span aria-hidden="true">← </span>Back to portfolio
+      </Link>
 
       {phase === "idle" && (
         <div className="text-center space-y-10 w-full max-w-xs">
@@ -247,6 +263,10 @@ export default function MathGame() {
                 ))}
               </div>
             </div>
+          )}
+
+          {boardError && (
+            <p className="text-xs text-zinc-500">Leaderboard is unavailable right now.</p>
           )}
 
           <button
@@ -300,11 +320,14 @@ export default function MathGame() {
               onChange={(e) => setInput(e.target.value.replace(/[^0-9]/g, ""))}
               onKeyDown={(e) => e.key === "Enter" && submitAnswer()}
               placeholder="Answer…"
+              aria-label={`Answer for ${question.a} ${question.op} ${question.b}`}
+              autoComplete="off"
               className="w-full text-center text-3xl font-bold bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-4 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30"
             />
             <button
               onMouseDown={(e) => e.preventDefault()}
               onClick={submitAnswer}
+              aria-label="Submit answer"
               className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 active:scale-95 rounded-2xl font-bold text-xl transition-all"
             >
               ✓
@@ -338,19 +361,26 @@ export default function MathGame() {
                 onChange={(e) => setPlayerName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && saveScore()}
                 placeholder="Your name"
+                aria-label="Your name for the leaderboard"
                 maxLength={20}
                 autoFocus
                 className="w-full text-center bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-3 focus:outline-none focus:border-indigo-500"
               />
+              {saveError && (
+                <p role="alert" className="text-sm text-red-400">
+                  Couldn&apos;t save your score. Try again, or skip.
+                </p>
+              )}
               <button
                 onClick={saveScore}
+                disabled={saving}
                 className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 rounded-2xl font-semibold transition-colors disabled:opacity-50"
               >
                 {saving ? "Saving…" : "Save score"}
               </button>
               <button
                 onClick={() => setShowNameInput(false)}
-                className="w-full py-2 text-sm text-zinc-600 hover:text-zinc-400 transition-colors"
+                className="w-full py-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
               >
                 Skip
               </button>
@@ -380,7 +410,7 @@ export default function MathGame() {
                         </span>
                         <span className="flex-1 text-zinc-300 truncate">{entry.name}</span>
                         <span className="font-bold tabular-nums">{entry.score}</span>
-                          </div>
+                      </div>
                     ))}
                   </div>
                 </div>
