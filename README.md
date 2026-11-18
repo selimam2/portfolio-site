@@ -1,6 +1,6 @@
 # samielimam.com
 
-Personal portfolio site, plus Math Blitz (`/game`), a small mental-math game with a shared leaderboard.
+Personal portfolio site.
 
 Next.js 16 (App Router), Tailwind CSS 4, deployed on Vercel.
 
@@ -23,7 +23,6 @@ All copy is hardcoded in the section components. There are no separate data file
 | Variable | Used by |
 |---|---|
 | `GMAIL_USER`, `GMAIL_APP_PASSWORD` | Contact form (Gmail SMTP via nodemailer) |
-| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Math Blitz leaderboard |
 
 ## Development
 
