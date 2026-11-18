@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { Moon, Sun, Menu, X } from "lucide-react";
@@ -40,9 +39,6 @@ export default function Nav() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-6 text-sm text-zinc-500 dark:text-zinc-400">
-          <Link href="/game" className="text-yellow-700 dark:text-yellow-500 font-medium hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors duration-150">
-            <span aria-hidden="true">⚡ </span>Play
-          </Link>
           {links.map((l) => (
             <a
               key={l.href}
@@ -89,13 +85,6 @@ export default function Nav() {
       {/* Mobile dropdown */}
       {open && (
         <div id="mobile-menu" className="md:hidden border-t border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-6 py-4 flex flex-col gap-4">
-          <Link
-            href="/game"
-            onClick={() => setOpen(false)}
-            className="text-sm font-medium text-yellow-700 dark:text-yellow-500 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors duration-150"
-          >
-            <span aria-hidden="true">⚡ </span>Play
-          </Link>
           {links.map((l) => (
             <a
               key={l.href}
