@@ -2,7 +2,7 @@ import { GithubIcon, LinkedinIcon, MailIcon } from "./Icons";
 
 export default function Hero() {
   return (
-    <section className="max-w-3xl mx-auto px-6 pt-24 pb-20">
+    <section id="top" className="max-w-3xl mx-auto px-6 pt-24 pb-20">
       <div className="space-y-8">
         <div className="space-y-4">
           <p className="text-sm font-mono text-indigo-500 tracking-widest uppercase font-medium">
@@ -31,7 +31,7 @@ export default function Hero() {
             rel="noopener noreferrer"
             className="text-indigo-600 dark:text-indigo-400 font-semibold underline underline-offset-2 decoration-indigo-300 hover:decoration-indigo-600 transition-colors duration-150"
           >
-            NorthShift Jobs ↗
+            NorthShift Jobs<span aria-hidden="true"> ↗</span>
           </a>
           .
         </p>

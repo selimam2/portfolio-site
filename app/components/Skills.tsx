@@ -34,26 +34,26 @@ const skillGroups = [
 export default function Skills() {
   return (
     <section id="skills" className="max-w-3xl mx-auto px-6 py-20 border-t border-zinc-100 dark:border-zinc-800">
-      <h2 className="text-xs font-mono text-zinc-400 tracking-widest uppercase mb-12">
+      <h2 className="text-xs font-mono text-zinc-500 dark:text-zinc-400 tracking-widest uppercase mb-12">
         Skills
       </h2>
 
       <div className="space-y-8">
         {skillGroups.map((group) => (
           <div key={group.label}>
-            <span className={`text-xs font-semibold uppercase tracking-widest ${group.labelColor} mb-3 block`}>
+            <h3 className={`text-xs font-semibold uppercase tracking-widest ${group.labelColor} mb-3 block`}>
               {group.label}
-            </span>
-            <div className="flex flex-wrap gap-2">
+            </h3>
+            <ul className="flex flex-wrap gap-2" aria-label={group.label}>
               {group.items.map((item) => (
-                <span
+                <li
                   key={item}
                   className={`text-sm font-medium px-3 py-1 rounded-full ${group.color}`}
                 >
-                  {item}
-                </span>
+                  {item}{" "}
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         ))}
       </div>

@@ -8,9 +8,11 @@ type Status = "idle" | "sending" | "success" | "error";
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg(null);
     setStatus("sending");
     try {
       const res = await fetch("/api/contact", {
@@ -18,15 +20,23 @@ export default function Contact() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      setStatus(res.ok ? "success" : "error");
+      if (res.ok) {
+        setStatus("success");
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        const data = await res.json().catch(() => null);
+        setErrorMsg(data?.error ?? null);
+        setStatus("error");
+      }
     } catch {
+      setErrorMsg(null);
       setStatus("error");
     }
   };
 
   return (
     <section id="contact" className="max-w-3xl mx-auto px-6 py-20 border-t border-zinc-100 dark:border-zinc-800">
-      <h2 className="text-xs font-mono text-zinc-400 tracking-widest uppercase mb-12">
+      <h2 className="text-xs font-mono text-zinc-500 dark:text-zinc-400 tracking-widest uppercase mb-12">
         Contact
       </h2>
 
@@ -73,10 +83,12 @@ export default function Contact() {
               id="name"
               type="text"
               required
+              maxLength={100}
+              autoComplete="name"
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="Your name"
-              className="w-full px-3 py-2 text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              className="w-full px-3 py-2 text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
             />
           </div>
           <div>
@@ -87,10 +99,12 @@ export default function Contact() {
               id="email"
               type="email"
               required
+              maxLength={254}
+              autoComplete="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               placeholder="you@example.com"
-              className="w-full px-3 py-2 text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              className="w-full px-3 py-2 text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
             />
           </div>
           <div>
@@ -100,25 +114,41 @@ export default function Contact() {
             <textarea
               id="message"
               required
+              maxLength={5000}
               rows={4}
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               placeholder="What's on your mind?"
-              className="w-full px-3 py-2 text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none"
+              className="w-full px-3 py-2 text-sm border border-zinc-200 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder-zinc-500 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none"
             />
           </div>
 
           <button
             type="submit"
-            disabled={status === "sending" || status === "success"}
+            disabled={status === "sending"}
             className="w-full py-2.5 px-4 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-150"
           >
             {status === "sending" ? "Sending…" : status === "success" ? "Sent ✓" : "Send message"}
           </button>
 
-          {status === "error" && (
-            <p className="text-sm text-red-500">Something went wrong. Try emailing directly.</p>
-          )}
+          {/* Always rendered so screen readers announce changes to it. */}
+          <p role="status" aria-live="polite" className="text-sm min-h-5">
+            {status === "success" && (
+              <span className="text-emerald-700 dark:text-emerald-400">
+                Thanks, your message was sent. I&apos;ll get back to you soon.
+              </span>
+            )}
+            {status === "error" && (
+              <span className="text-red-600 dark:text-red-400">
+                {errorMsg ? `${errorMsg} ` : "Something went wrong. "}
+                You can also email me directly at{" "}
+                <a href="mailto:samielimam@gmail.com" className="underline underline-offset-2">
+                  samielimam@gmail.com
+                </a>
+                .
+              </span>
+            )}
+          </p>
         </form>
       </div>
     </section>

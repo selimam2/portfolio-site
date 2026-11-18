@@ -1,7 +1,7 @@
 export default function Education() {
   return (
     <section id="education" className="max-w-3xl mx-auto px-6 py-20 border-t border-zinc-100 dark:border-zinc-800">
-      <h2 className="text-xs font-mono text-zinc-400 tracking-widest uppercase mb-12">
+      <h2 className="text-xs font-mono text-zinc-500 dark:text-zinc-400 tracking-widest uppercase mb-12">
         Education
       </h2>
 
@@ -9,19 +9,22 @@ export default function Education() {
         <div>
           <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">University of Waterloo</h3>
           <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">Bachelor of Computer Engineering</p>
-          <div className="flex flex-wrap gap-2 mt-3">
-            <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400">
-              GPA 3.5 / 4.0
-            </span>
-            <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+          {/* A list, not bare sibling spans: adjacent spans have no text between
+              them, so copy/paste, crawlers and resume parsers read the chips as
+              one run-on string ("GPA 3.5 / 4.05 co-op terms"). */}
+          <ul className="flex flex-wrap gap-2 mt-3">
+            <li className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-400">
+              GPA 3.5/4.0
+            </li>{" "}
+            <li className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
               5 co-op terms
-            </span>
-            <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+            </li>{" "}
+            <li className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
               Waterloo, ON
-            </span>
-          </div>
+            </li>
+          </ul>
         </div>
-        <span className="text-sm text-zinc-400 font-mono shrink-0">2020 – 2025</span>
+        <span className="text-sm text-zinc-500 dark:text-zinc-400 font-mono shrink-0">2020 – 2025</span>
       </div>
     </section>
   );

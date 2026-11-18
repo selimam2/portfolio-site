@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Moon, Sun, Menu, X } from "lucide-react";
 
 const links = [
@@ -14,10 +15,14 @@ const links = [
 
 export default function Nav() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  // false during SSR/hydration, true on the client: the theme is unknown on
+  // the server, so the toggle icon only renders once mounted.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const [open, setOpen] = useState(false);
-
-  useEffect(() => setMounted(true), []);
 
   // Close menu on resize to desktop
   useEffect(() => {
@@ -28,16 +33,16 @@ export default function Nav() {
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-sm border-b border-zinc-100 dark:border-zinc-800">
-      <nav className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 tracking-tight">
+      <nav aria-label="Main" className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="#top" className="text-sm font-medium text-zinc-900 dark:text-zinc-100 tracking-tight">
           Sami El-Imam
-        </span>
+        </a>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-6 text-sm text-zinc-500 dark:text-zinc-400">
-          <a href="/game" className="text-yellow-500 font-medium hover:text-yellow-400 transition-colors duration-150">
-            ⚡ Play
-          </a>
+          <Link href="/game" className="text-yellow-700 dark:text-yellow-500 font-medium hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors duration-150">
+            <span aria-hidden="true">⚡ </span>Play
+          </Link>
           {links.map((l) => (
             <a
               key={l.href}
@@ -72,7 +77,9 @@ export default function Nav() {
           <button
             onClick={() => setOpen((o) => !o)}
             className="p-1.5 rounded-md text-zinc-500 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-150"
-            aria-label="Toggle menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
           >
             {open ? <X size={18} /> : <Menu size={18} />}
           </button>
@@ -81,14 +88,14 @@ export default function Nav() {
 
       {/* Mobile dropdown */}
       {open && (
-        <div className="md:hidden border-t border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-6 py-4 flex flex-col gap-4">
-          <a
+        <div id="mobile-menu" className="md:hidden border-t border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-6 py-4 flex flex-col gap-4">
+          <Link
             href="/game"
             onClick={() => setOpen(false)}
-            className="text-sm font-medium text-yellow-500 hover:text-yellow-400 transition-colors duration-150"
+            className="text-sm font-medium text-yellow-700 dark:text-yellow-500 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors duration-150"
           >
-            ⚡ Play
-          </a>
+            <span aria-hidden="true">⚡ </span>Play
+          </Link>
           {links.map((l) => (
             <a
               key={l.href}

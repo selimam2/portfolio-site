@@ -1,28 +1,84 @@
 import { ArrowUpRight } from "lucide-react";
 
-const projects = [
+// Tag colour palette, so the same tech always gets the same chip colour.
+const tag = {
+  ai: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
+  llm: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  openai: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+  blue: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  cyan: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400",
+  green: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  sky: "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400",
+  orange: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
+  indigo: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400",
+  zinc: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400",
+  todo: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300",
+};
+
+type Project = {
+  name: string;
+  year: string | null;
+  url: string | null;
+  urlLabel: string | null;
+  github: string | null;
+  featured: boolean;
+  description: string;
+  highlights: string[];
+  tags: { label: string; color: string }[];
+};
+
+// Ordered most recent and most AI/backend-heavy first.
+const projects: Project[] = [
+  {
+    name: "DebutPage",
+    year: "2026",
+    url: "https://debutpage.com",
+    urlLabel: "debutpage.com",
+    github: null,
+    featured: true,
+    description:
+      "Upload a resume and the Claude API turns it into a hosted portfolio site. DebutPage is a SaaS I designed, built and run solo. The LLM pipeline is the core of the product: it reads an unstructured PDF resume and produces a structured, publishable site from it.",
+    highlights: [
+      "Claude API pipelines parse uploaded PDF resumes into structured data, then generate a hosted personal site from it.",
+      "Multi-turn conversational theme editor: users restyle their site by describing the change in plain language.",
+      "Custom domain search, registration, and TLS provisioning on AWS (Route 53, ACM), with Stripe subscription billing and usage quotas.",
+      "CI/CD deployment to AWS via GitHub Actions; Drizzle ORM on PostgreSQL, tested with Vitest.",
+    ],
+    tags: [
+      { label: "Claude API", color: tag.ai },
+      { label: "LLM", color: tag.llm },
+      { label: "TypeScript", color: tag.blue },
+      { label: "Next.js", color: tag.zinc },
+      { label: "React", color: tag.cyan },
+      { label: "PostgreSQL", color: tag.sky },
+      { label: "AWS", color: tag.orange },
+      { label: "Stripe", color: tag.indigo },
+    ],
+  },
   {
     name: "NorthShift Jobs",
     year: "2026",
     url: "https://northshift.ca",
     urlLabel: "northshift.ca",
-    github: null,
+    github: "https://github.com/selimam2/northshift-jobs",
     featured: true,
     description:
-      "Contract nursing in rural Canada is a broken market — positions go unfilled for months while nurses scroll through outdated boards or work through expensive staffing agencies. I built NorthShift to cut out the middleman: a direct-hire platform where employers post and nurses apply, fully bilingual, with no middleman taking a cut. Took it from zero to live, solo, end-to-end.",
+      "Contract nursing in rural Canada is a broken market — positions go unfilled for months while nurses scroll through outdated boards or work through expensive staffing agencies. I built NorthShift to cut out the middleman: a fully bilingual (English/French) direct-hire platform where employers post and nurses apply, with no agency taking a cut. Took it from zero to live, solo, end-to-end.",
     highlights: [
+      "Provisioned the full AWS infrastructure as code with Terraform. Launched on ECS Fargate, RDS and an ALB, then measured where the spend went and consolidated onto a single Dockerized EC2 host behind Caddy, cutting infrastructure cost from ~$104 to ~$27 per month (~74%).",
+      "Kept the move reversible: Terraform manages the VPC, EC2, ECR, S3, Route 53 and security groups, with Postgres backed up to S3. The trade-offs (single point of failure, vertical scaling, brief-downtime deploys) were a deliberate call for a pre-revenue product.",
       "Automated Stripe billing — checkout sessions, webhook handling, trial periods, and tier-based feature gating integrated with role-based JWT auth across three permission levels.",
-      "Provisioned full AWS infrastructure as code with Terraform: ECS Fargate for zero-downtime deploys, RDS (PostgreSQL), ALB, ACM, Route 53, ECR, and S3.",
     ],
     tags: [
-      { label: "TypeScript", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
-      { label: "React", color: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400" },
-      { label: "Node.js", color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
-      { label: "PostgreSQL", color: "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400" },
-      { label: "AWS", color: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400" },
-      { label: "Terraform", color: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" },
-      { label: "Stripe", color: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400" },
-      { label: "Docker", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
+      { label: "AWS", color: tag.orange },
+      { label: "Terraform", color: tag.ai },
+      { label: "Docker", color: tag.blue },
+      { label: "C#", color: tag.indigo },
+      { label: "ASP.NET Core", color: tag.indigo },
+      { label: "TypeScript", color: tag.blue },
+      { label: "Next.js", color: tag.zinc },
+      { label: "PostgreSQL", color: tag.sky },
+      { label: "Stripe", color: tag.indigo },
     ],
   },
   {
@@ -30,34 +86,21 @@ const projects = [
     year: "May – Aug 2024",
     url: null,
     urlLabel: null,
-    github: "https://github.com/selimam2/TongueTip",
+    // Repo is private (github.com/selimam2/ToungeTip returns 404), so no link.
+    github: null,
     featured: false,
     description:
-      "Everyone knows the tip-of-the-tongue feeling — a word you know but can't pull up on demand. For people with aphasia, that feeling is constant. We built TongueTip to help: speak naturally and the app listens for gaps, then surfaces what you were reaching for in real time. We paired on-device Gemma for privacy with GPT-4o for accuracy, letting users choose their own trade-off.",
-    highlights: [],
-    tags: [
-      { label: "Android", color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
-      { label: "Google Gemma", color: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400" },
-      { label: "GPT-4o", color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400" },
-      { label: "LLM", color: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
-      { label: "Java", color: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400" },
+      "Everyone knows the tip-of-the-tongue feeling — a word you know but can't pull up on demand. For people with aphasia, that feeling is constant. Our team built TongueTip to help: speak naturally and the Android app listens for gaps, then surfaces the word you were reaching for in real time.",
+    highlights: [
+      "Two-model LLM architecture: Google Gemma runs on-device, so speech never leaves the phone; GPT-4o runs in the cloud for more accurate suggestions. Users choose which one to use, trading privacy against accuracy.",
+      "I built the LLM integration, including prompt design and routing between the two models, tuned for low-latency suggestions.",
     ],
-  },
-  {
-    name: "Message Scheduler",
-    year: null,
-    url: null,
-    urlLabel: null,
-    github: "https://github.com/selimam2/Message-Scheduler",
-    featured: false,
-    description:
-      "MERN-stack app to schedule and send text messages at a specified time.",
-    highlights: [],
     tags: [
-      { label: "MongoDB", color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
-      { label: "Express.js", color: "bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400" },
-      { label: "React", color: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400" },
-      { label: "Node.js", color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
+      { label: "Google Gemma", color: tag.ai },
+      { label: "GPT-4o", color: tag.openai },
+      { label: "LLM", color: tag.llm },
+      { label: "Android", color: tag.green },
+      { label: "Kotlin", color: tag.orange },
     ],
   },
 ];
@@ -65,13 +108,13 @@ const projects = [
 export default function Projects() {
   return (
     <section id="projects" className="max-w-3xl mx-auto px-6 py-20 border-t border-zinc-100 dark:border-zinc-800">
-      <h2 className="text-xs font-mono text-zinc-400 tracking-widest uppercase mb-12">
+      <h2 className="text-xs font-mono text-zinc-500 dark:text-zinc-400 tracking-widest uppercase mb-12">
         Projects
       </h2>
 
       <div className="space-y-10">
         {projects.map((project) => (
-          <div
+          <article
             key={project.name}
             className={
               project.featured
@@ -79,11 +122,14 @@ export default function Projects() {
                 : ""
             }
           >
-            <div className="flex items-start justify-between gap-4 mb-3">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1 mb-3">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
                 <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">{project.name}</h3>
                 {project.year && (
-                  <span className="text-xs font-mono text-zinc-400">{project.year}</span>
+                  <>
+                    <span className="sr-only"> · </span>
+                    <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">{project.year}</span>
+                  </>
                 )}
               </div>
               <div className="flex items-center gap-3 shrink-0">
@@ -95,7 +141,8 @@ export default function Projects() {
                     className="inline-flex items-center gap-1 text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors duration-150"
                   >
                     {project.urlLabel}
-                    <ArrowUpRight size={12} />
+                    <ArrowUpRight size={12} aria-hidden="true" />
+                    <span className="sr-only"> (opens in a new tab)</span>
                   </a>
                 )}
                 {project.github && (
@@ -106,7 +153,8 @@ export default function Projects() {
                     className="inline-flex items-center gap-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors duration-150"
                   >
                     GitHub
-                    <ArrowUpRight size={12} />
+                    <span className="sr-only"> repository for {project.name} (opens in a new tab)</span>
+                    <ArrowUpRight size={12} aria-hidden="true" />
                   </a>
                 )}
               </div>
@@ -129,17 +177,17 @@ export default function Projects() {
               </ul>
             )}
 
-            <div className="flex flex-wrap gap-1.5">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag.label}
-                  className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${tag.color}`}
+            <ul className="flex flex-wrap gap-1.5" aria-label={`${project.name} tech stack`}>
+              {project.tags.map((t) => (
+                <li
+                  key={t.label}
+                  className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${t.color}`}
                 >
-                  {tag.label}
-                </span>
+                  {t.label}{" "}
+                </li>
               ))}
-            </div>
-          </div>
+            </ul>
+          </article>
         ))}
       </div>
     </section>
